@@ -22,7 +22,8 @@ func main() {
 
 	argLength := len(os.Args[1:])
 	if argLength == 1 && os.Args[1] == "logFile" {
-		a := helpers.ProcessLogFile()
+		f := helpers.GetLatestLogFile()
+		a := helpers.ProcessLogFile(f)
 		storage.CreateSessions(db, a)
 	}
 
@@ -30,6 +31,7 @@ func main() {
 		env := &handlers.Env{DB: db}
 		http.Handle("/health-check", handlers.Handler{Env: env, H: handlers.HealthCheckRouteHandler, Method: http.MethodGet})
 		http.Handle("/sessions", handlers.Handler{Env: env, H: handlers.SessionsRouteHandler, Method: http.MethodGet})
+		http.Handle("/session-add", handlers.Handler{Env: env, H: handlers.SessionsRouteHandler, Method: http.MethodPost})
 		log.Println("Serving on host - port 8085.....")
 		errHTTP := http.ListenAndServe(":8085", nil)
 		if errHTTP != nil {

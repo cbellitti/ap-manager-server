@@ -43,14 +43,18 @@ var equipment Equipment
 var targets []Target
 var tgt Target
 
-func ProcessLogFile() Session {
+func GetLatestLogFile() string {
+	return getLogFileName()
+}
+
+func ProcessLogFile(fileName string) Session {
 
 	focuserSequenceStart = false
 	equipment.TelescopeFocalLength = 0
 	plateSolveStart = false
 	meridianFlipStart = false
 
-	file, err := os.Open(getLogFileName())
+	file, err := os.Open(fileName)
 	if err != nil {
 		fmt.Println(err)
 	}
